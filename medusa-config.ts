@@ -27,6 +27,20 @@ module.exports = defineConfig({
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
   },
   modules: [
-    { key: "api_key", resolve: "@medusajs/medusa/api-key" },
-  ],
+  { key: "api_key", resolve: "@medusajs/medusa/api-key" },
+  {
+    resolve: "@medusajs/medusa/payment",
+    options: {
+      providers: [
+        {
+          resolve: "@medusajs/medusa/payment-stripe",
+          id: "stripe",
+          options: {
+            apiKey: process.env.STRIPE_API_KEY,
+          },
+        },
+      ],
+    },
+  },
+],
 })
