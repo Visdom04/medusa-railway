@@ -68,8 +68,7 @@ export default async function skillupOrderPlacedHandler({
 
   if (!order?.id) {
     logger.error(
-      { orderId: data.id },
-      "[skillup] order not found for order.placed event"
+      `[skillup] order not found for order.placed event (orderId=${data.id})`
     )
     return
   }
@@ -87,12 +86,7 @@ export default async function skillupOrderPlacedHandler({
     const body = await response.text()
 
     logger.error(
-      {
-        orderId: order.id,
-        status: response.status,
-        body: body.slice(0, 500),
-      },
-      "[skillup] entitlement webhook failed"
+      `[skillup] entitlement webhook failed (orderId=${order.id}, status=${response.status}): ${body.slice(0, 500)}`
     )
 
     throw new Error(
@@ -105,11 +99,7 @@ export default async function skillupOrderPlacedHandler({
   } | null
 
   logger.info(
-    {
-      orderId: order.id,
-      granted: result?.granted ?? 0,
-    },
-    "[skillup] entitlement webhook delivered"
+    `[skillup] entitlement webhook delivered (orderId=${order.id}, granted=${result?.granted ?? 0})`
   )
 }
 
